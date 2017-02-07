@@ -7077,6 +7077,16 @@ This variable has no effect, if
         (defvar flycheck-emacs-lisp-check-declare)
         (setq flycheck-emacs-lisp-check-declare ,value)))))
 
+(flycheck-def-option-var flycheck-emacs-lisp-other-initialization
+    nil emacs-lisp
+  "Other initialization to perform before byte-compiling.
+
+This can be set to any form to evaluate."
+  :type 'sexp
+  :risky t
+  :package-version '(flycheck . "0.14"))
+
+
 (flycheck-define-checker emacs-lisp
   "An Emacs Lisp syntax checker using the Emacs Lisp Byte compiler.
 
@@ -7093,6 +7103,8 @@ See Info Node `(elisp)Byte Compilation'."
                     flycheck-option-emacs-lisp-package-initialize)
             (option "--eval" flycheck-emacs-lisp-check-declare nil
                     flycheck-option-emacs-lisp-check-declare)
+            (option "--eval" flycheck-emacs-lisp-other-initialization
+                    flycheck-sexp-to-string)
             "--eval" (eval flycheck-emacs-lisp-check-form)
             "--"
             source-inplace)
