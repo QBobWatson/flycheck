@@ -7103,7 +7103,7 @@ See Info Node `(elisp)Byte Compilation'."
                     flycheck-option-emacs-lisp-package-initialize)
             (option "--eval" flycheck-emacs-lisp-check-declare nil
                     flycheck-option-emacs-lisp-check-declare)
-            (option "--eval" flycheck-emacs-lisp-other-initialization
+            (option "--eval" flycheck-emacs-lisp-other-initialization nil
                     flycheck-sexp-to-string)
             "--eval" (eval flycheck-emacs-lisp-check-form)
             "--"
