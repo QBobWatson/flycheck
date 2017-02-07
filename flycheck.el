@@ -7077,15 +7077,16 @@ This variable has no effect, if
         (defvar flycheck-emacs-lisp-check-declare)
         (setq flycheck-emacs-lisp-check-declare ,value)))))
 
-(flycheck-def-option-var flycheck-emacs-lisp-other-initialization
+(flycheck-def-option-var flycheck-emacs-lisp-require-features
     nil emacs-lisp
-  "Other initialization to perform before byte-compiling.
-
-This can be set to any form to evaluate."
-  :type 'sexp
+  "List of features to require before checking."
+  :type '(repeat (string :tag "Feature to require"))
   :risky t
   :package-version '(flycheck . "0.14"))
 
+(defun flycheck-emacs-lisp-feature-requires (value)
+  "Option VALUE filter for `flycheck-def-option-var'."
+  (mapconcat (lambda (feature) (format "(require '%s)" feature)) value " "))
 
 (flycheck-define-checker emacs-lisp
   "An Emacs Lisp syntax checker using the Emacs Lisp Byte compiler.
@@ -7103,8 +7104,8 @@ See Info Node `(elisp)Byte Compilation'."
                     flycheck-option-emacs-lisp-package-initialize)
             (option "--eval" flycheck-emacs-lisp-check-declare nil
                     flycheck-option-emacs-lisp-check-declare)
-            (option "--eval" flycheck-emacs-lisp-other-initialization nil
-                    flycheck-sexp-to-string)
+            (option "--eval" flycheck-emacs-lisp-require-features nil
+                    flycheck-emacs-lisp-feature-requires)
             "--eval" (eval flycheck-emacs-lisp-check-form)
             "--"
             source-inplace)
